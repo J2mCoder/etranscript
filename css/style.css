@@ -1,0 +1,121 @@
+:root {
+  --primary-100: #d4eaf7;
+  --primary-200: #b6ccd8;
+  --primary-300: #3b3c3d;
+  --accent-100: #71c4ef;
+  --accent-200: #00668c;
+  --text-100: #1d1c1c;
+  --text-200: #313d44;
+  --bg-100: #f7f9f9;
+  --bg-200: #f5f4f1;
+  --bg-300: #cccbc8;
+}
+
+a {
+  text-decoration: none !important;
+  color: var(--bg-100) !important;
+}
+
+body {
+  background-color: var(--bg-100);
+  /*box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);*/
+}
+
+header {
+  background-color: var(--accent-200);
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navlink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navbar-toggler {
+  margin-left: 100px !important;
+}
+
+.pagine {
+  color: var(--text-100) !important;
+  padding: 10px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+.pagine:hover {
+  background-color: var(--accent-200);
+  color: var(--bg-100) !important;
+  border-radius: 10px;
+}
+
+.profileImage {
+  margin-left: 450px !important;
+}
+
+.searchBars {
+  background: linear-gradient(to right, var(--accent-200), var(--primary-100));
+}
+
+.btnSearch {
+  background: #02222ec1;
+  color: var(--bg-100);
+}
+
+.btnSearch:hover {
+  background: #055b7af4;
+  color: var(--bg-100);
+}
+
+.DeleteProfil {
+  background: rgba(255, 0, 0, 0.71) !important;
+  color: var(--bg-100);
+}
+
+.DeleteProfil:hover {
+  background: rgba(255, 0, 0, 0.51) !important;
+  color: var(--bg-100);
+}
+footer {
+  background-color: var(--accent-200);
+}
+
+.BackTop {
+  background-color: var(--accent-100);
+  color: var(--text-100) !important;
+}
+
+.BackTop:hover,
+.BackTop:active {
+  background-color: var(--accent-100);
+  color: var(--text-100) !important;
+}
+
+.btnAdd:hover,
+.btnAdd,
+.btnAdd:active {
+  background-color: var(--accent-200);
+  color: var(--bg-100) !important;
+  border: none;
+  outline: none;
+}
+
+.signScroll {
+  overflow-y: scroll !important;
+}
+
+@media screen and (max-width: 768px) {
+  .navlink {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+  }
+  .custom-text {
+    font-size: 14px !important;
+  }
+}
