@@ -6,4 +6,6 @@
   <link rel="stylesheet" href="css/style.css">
   <title>Home eTranscript</title>
   <script src="css/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
+  <script src="js/jquery-3.5.1.min.js"></script>
+  <script src="js/script.js"></script>
 </head>

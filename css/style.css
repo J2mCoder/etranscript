@@ -90,6 +90,11 @@ footer {
   color: var(--text-100) !important;
 }
 
+.btnArch {
+  background-color: var(--accent-100) !important;
+  color: var(--accent-200) !important;
+}
+
 .BackTop:hover,
 .BackTop:active {
   background-color: var(--accent-100);

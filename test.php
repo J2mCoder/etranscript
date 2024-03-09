@@ -1,3 +1,65 @@
+<?php
+// Connexion à la base de données (utilisez vos propres informations)
+$cnx = new PDO('mysql:host=localhost;dbname=ma_base_de_donnees;charset=utf8', 'utilisateur', 'mot_de_passe');
+
+// Requête pour récupérer tous les éléments de la table
+$query = 'SELECT * FROM `ma_table`';
+$resultSet = $cnx->query($query);
+
+// Nombre d'éléments par page
+$elementsParPage = 10;
+
+// Calcul du nombre total d'éléments
+$nombreTotalElements = $resultSet->rowCount();
+
+// Calcul du nombre total de pages
+$nombreDePages = ceil($nombreTotalElements / $elementsParPage);
+
+// Page actuelle (récupérée depuis l'URL ou définie par défaut)
+$pageActuelle = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calcul de l'offset pour la requête LIMIT
+$offset = ($pageActuelle - 1) * $elementsParPage;
+
+// Requête pour récupérer les éléments de la page actuelle
+$queryPage = "SELECT * FROM `ma_table` LIMIT $offset, $elementsParPage";
+$resultSetPage = $cnx->query($queryPage);
+
+// Affichage des éléments
+while ($element = $resultSetPage->fetch()) {
+    // Affichez les données ici
+    // Exemple : echo $element['nom'];
+}
+?>
+<?php
+// Affiche le lien vers la page précédente
+if ($pageActuelle > 1) {
+    echo '<a href="?page=' . ($pageActuelle - 1) . '">Précédent</a> ';
+}
+
+// Affiche les numéros de page avec des liens
+for ($i = 1; $i <= $nombreDePages; $i++) {
+    echo '<a href="?page=' . $i . '">' . $i . '</a> ';
+}
+
+// Affiche le lien vers la page suivante
+if ($pageActuelle < $nombreDePages) {
+    echo '<a href="?page=' . ($pageActuelle + 1) . '">Suivant</a>';
+}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="row">
   <div style="margin: auto;background-color: white;height: 500px;border-radius: 10px;" class="col-12 col-md-12">
     <div class="row">

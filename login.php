@@ -4,42 +4,67 @@ session_start();
 #-------------------------------------------------------------------------------------------
 require("require/connect_db.php");
 #-------------------------------------------------------------------------------------------
+if (isset($_SESSION["ADMIN_DATA"]) || isset($_SESSION["ARCHIVISTE_DATA"])) {
+#-------------------------------------------------------------------------------------------
+  header("location: home.php");
+  exit;
+#-------------------------------------------------------------------------------------------
+}
+#-------------------------------------------------------------------------------------------
+if (isset($_COOKIE["AdminID"])) {
+#-------------------------------------------------------------------------------------------
+  $_SESSION["ADMIN_DATA"] = $_COOKIE["AdminID"];
+  header("location: home.php");
+  exit;
+#-------------------------------------------------------------------------------------------
+} elseif (isset($_COOKIE["ArchivisteID"])) {
+#-------------------------------------------------------------------------------------------
+  $_SESSION["ARCHIVISTE_DATA"] = $_COOKIE["ArchivisteID"];
+  header("location: home.php");
+  exit;
+#-------------------------------------------------------------------------------------------
+}
+#-------------------------------------------------------------------------------------------
 if(isset($_POST["log-in"])) {
 #-------------------------------------------------------------------------------------------
 if(!empty($_POST["login"]) && !empty($_POST["password"])) {
 #-------------------------------------------------------------------------------------------
-    $login = strip_tags($_POST["login"]);
-    $password = strip_tags($_POST["password"]);
+  $login = strip_tags($_POST["login"]);
+  $password = strip_tags($_POST["password"]);
 #-------------------------------------------------------------------------------------------
-    $REQ_ADMIN = $connect_db->prepare("SELECT * FROM admin WHERE telephoneAdmin=? OR emailAdmin=?");
+  $REQ_ADMIN = $connect_db->prepare("SELECT * FROM admin WHERE telephoneAdmin=? OR emailAdmin=?");
 #-------------------------------------------------------------------------------------------
-    $REQ_ADMIN->execute([$login,$login]);
+  $REQ_ADMIN->execute([$login,$login]);
 #-------------------------------------------------------------------------------------------
-    $REQ_ARCHIVISTE = $connect_db->prepare("SELECT * FROM archiviste WHERE telephoneArchi=? OR emailArchi=?");
+  $REQ_ARCHIVISTE = $connect_db->prepare("SELECT * FROM archiviste WHERE telephoneArchi=? OR emailArchi=?");
 #-------------------------------------------------------------------------------------------
-    $REQ_ARCHIVISTE->execute([$login,$login]);
+  $REQ_ARCHIVISTE->execute([$login,$login]);
 #-------------------------------------------------------------------------------------------
 if($REQ_ADMIN->rowCount() == 1) {
 #-------------------------------------------------------------------------------------------
-    $ADMIN = $REQ_ADMIN->fetch();
+  $ADMIN = $REQ_ADMIN->fetch();
 #-------------------------------------------------------------------------------------------
 if(password_verify($password, $ADMIN["mdpAdmin"])) {
 #-------------------------------------------------------------------------------------------
-    $_SESSION["ADMIN_DATA"] = $ADMIN["AdminID"];
+  setcookie("AdminID", $ADMIN["AdminID"], time() + 6 * 30 * 24 * 60 * 60, "/");
 #-------------------------------------------------------------------------------------------
-    header("location:./");
+  $_SESSION["ADMIN_DATA"] = $ADMIN["AdminID"];
+#-------------------------------------------------------------------------------------------
+  header("location:./");
 #-------------------------------------------------------------------------------------------
 } else { $eMsg = "Mot de passe incorrect"; }
 #-------------------------------------------------------------------------------------------
 } else if($REQ_ARCHIVISTE->rowCount() == 1){
 #-------------------------------------------------------------------------------------------
-    $ARCHIVISTE = $REQ_ARCHIVISTE->fetch();
+  $ARCHIVISTE = $REQ_ARCHIVISTE->fetch();
 #-------------------------------------------------------------------------------------------
 if(password_verify($password, $ARCHIVISTE["mdpArchi"])) {
 #-------------------------------------------------------------------------------------------
-    $_SESSION["ARCHIVISTE_DATA"] = $ARCHIVISTE["ArchivisteID"];
+  setcookie("ArchivisteID", $ARCHIVISTE["ArchivisteID"], time() + 6 * 30 * 24 * 60 * 60, "/");
 #-------------------------------------------------------------------------------------------
-    header("location:./");
+  $_SESSION["ARCHIVISTE_DATA"] = $ARCHIVISTE["ArchivisteID"];
+#-------------------------------------------------------------------------------------------
+  header("location:./");
 #-------------------------------------------------------------------------------------------
 } else { $eMsg = "Mot de passe incorrect"; }
 #-------------------------------------------------------------------------------------------
@@ -56,7 +81,7 @@ if(password_verify($password, $ARCHIVISTE["mdpArchi"])) {
 
 <body>
   <form method="post">
-    <section class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <section class="d-flex justify-content-center align-items-center p-4" style="height: 100vh;">
       <div class="container">
         <div class="row">
           <div class="card shadow-sm p-0 m-0">

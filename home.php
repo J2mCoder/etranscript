@@ -3,8 +3,6 @@ session_start();
 require("./require/connect_db.php");
 require("./require/treat-user.php");
 
-
-
 $REQ_DEPARTEMENT     = $connect_db->query("SELECT * FROM departement ORDER BY DepartementID");
 $REQ_FACULTE         = $connect_db->query("SELECT * FROM faculte ORDER BY FaculteID");
 
@@ -241,7 +239,7 @@ if(isset($_POST["search"])) {
           <h5 class="card-title widget-card-title m-0">Résultat de la recherche (<?= $COUNT_STUDENT ?>)</h5>
         </div>
         <div class="card-body p-4">
-          <table class="table table-hover table-responsive">
+          <table class="table table-hover table-bordered">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -278,8 +276,8 @@ if(isset($_POST["search"])) {
                 </td>
                 <td class="d-none d-md-table-cell"><?= $STUDENTS['postnomStudent']; ?></td>
                 <td class="d-none d-md-table-cell"><?= $STUDENTS['prenomStudent']; ?></td>
-                <td class="d-none d-md-table-cell"><?= $dep["nom"]; ?></td>
-                <td class="d-none d-md-table-cell"><?= $fac["nom"]; ?></td>
+                <td class="d-none d-md-table-cell"><?= $dep["nom"] ?? "introuvable"; ?></td>
+                <td class="d-none d-md-table-cell"><?= $fac["nom"] ?? "introuvable"; ?></td>
                 <td class="d-none d-md-table-cell"><?= $STUDENTS['year_acStudent']; ?></td>
                 <td>
                   <a href="" class="bginfo p-2 rounded m-auto d-flex align-items-center justify-content-center"

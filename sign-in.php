@@ -79,7 +79,7 @@ if (isset($_POST["register"])) {
 
 <body>
   <form method="post">
-    <section class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <section class="d-flex justify-content-center align-items-center p-4" style="height: 100vh;">
       <div class="container">
         <div class="row">
           <div class="card shadow-sm p-0 m-0" style="max-height:80vh; height:100%;">
