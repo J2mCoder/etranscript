@@ -54,15 +54,6 @@ if (isset($ADMIN)) {
     return $mois[$numeroMois] ?? "Pas d'enregistrement";
   }
   #----------------------------------------------------------------
-/*   $REQ_ARCHIVISTES = $connect_db->query("SELECT * FROM archiviste ORDER BY 	nomArchi");
-  $COUNT_ARCHIVISTES = $REQ_ARCHIVISTES->rowCount();
-  #----------------------------------------------------------------
-  $REQ_DEPARTEMENT = $connect_db->query("SELECT * FROM departement ORDER BY nom LIMIT 10");
-  #----------------------------------------------------------------
-  $REQ_FACULTE = $connect_db->query("SELECT * FROM faculte ORDER BY nom");
-  #----------------------------------------------------------------
-  $REQ_STUDENTS = $connect_db->query("SELECT * FROM student ORDER BY datesave DESC LIMIT 20"); */
-  #----------------------------------------------------------------
   if (isset($_GET["departement_update"])) {
     $dptmt_url = strip_tags($_GET["departement_update"]);
     $select_departemt = $connect_db->query("SELECT * FROM departement WHERE DepartementID=".$dptmt_url);
@@ -164,19 +155,28 @@ if (isset($ADMIN)) {
     }
   }
 
-  function recupererDonneesTable($table, $champ=null, $search=null) {
+  function recupererDonneesTable($table, $champ=null, $search=null,$page=null,$limit=null) {
     global $connect_db;
-    if ($champ != null && $search != null) {
-      $req = $connect_db->prepare("SELECT * FROM $table WHERE $champ LIKE :search");
+
+    if (isset($page) && $page != null) {
+      $elementsParPage = 4;
+      $q = $connect_db->query("SELECT * FROM $table");
+      $nombreTotalElements = $q->rowCount();
+      $nombreDePages = ceil($nombreTotalElements / $elementsParPage);
+      $pageActuelle = $page;
+      $offset = ($pageActuelle - 1) * $elementsParPage;
+      $req = $connect_db->query("SELECT * FROM $table LIMIT $offset, $elementsParPage");
+      return $req;
+    } elseif (isset($champ, $search) && $champ != null && $search != null) {
+      $req = $connect_db->prepare("SELECT * FROM $table WHERE $champ LIKE :search ".$limit);
       $req->execute(['search' => '%' . $search . '%']);
       return $req;
     } else {
-      $req = $connect_db->query("SELECT * FROM $table");
+      $req = $connect_db->query("SELECT * FROM $table ".$limit);
       return $req;
     }
   }
-
-  ?>
+?>
 <div class="card p-4 mb-3 shadow-sm">
   <div class="row gy-3 gy-md-4">
     <div class="col-12 col-sm-6 col-xl-3">
@@ -409,6 +409,29 @@ if (isset($ADMIN)) {
               <?php }} ?>
             </tbody>
           </table>
+          <nav>
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -478,6 +501,29 @@ if (isset($ADMIN)) {
               <?php }} ?>
             </tbody>
           </table>
+          <nav>
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -543,6 +589,29 @@ if (isset($ADMIN)) {
               <?php } } ?>
             </tbody>
           </table>
+          <nav>
+            <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">2</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#">3</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
@@ -578,8 +647,13 @@ if (isset($ADMIN)) {
               if(isset($_POST['searchFaculte']) && !empty($_POST['searchFaculte'])) {
                 $searchFaculte = strip_tags($_POST['searchFaculte']);
                 $sql = recupererDonneesTable('faculte', 'nom', $searchFaculte);
-              } else {
-                $sql = recupererDonneesTable("faculte");
+              } elseif (isset($_GET["page"],$_GET["tab"]) && !empty($_GET["page"]) && !empty($_GET["tab"])) {
+                $page = strip_tags($_GET["page"]);
+                $table = strip_tags($_GET["tab"]);
+                $sql = recupererDonneesTable($table, null, null, $page);
+              }else {
+                $limit = "LIMIT 4";
+                $sql = recupererDonneesTable("faculte",null,null,null, $limit);
               }
               $count = $sql->rowCount();
               if ($count == 0) {
@@ -607,6 +681,57 @@ if (isset($ADMIN)) {
               <?php }} ?>
             </tbody>
           </table>
+          <?php 
+          $sql = recupererDonneesTable("faculte",null,null,null, null);  
+          $count = $sql->rowCount();
+          if ($count > 7 && isset($_GET['tab']) && $_GET['tab'] == 'faculte') {
+          ?>
+          <nav>
+            <ul class="pagination">
+              <?php 
+              // Affiche le lien vers la page précédente
+              $elementsParPage = 4;
+              $q = $connect_db->query("SELECT * FROM faculte");
+              $nombreTotalElements = $q->rowCount();
+              $nombreDePages = ceil($nombreTotalElements / $elementsParPage);
+              $pageActuelle = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+              
+              if ($pageActuelle > 1) {
+                $a = $pageActuelle - 1;
+              ?>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="archive.php?page=<?= $a; ?>&tab=faculte"
+                  aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <?php }
+
+              for ($i = 1; $i <= $nombreDePages; $i++) { ?>
+              <?php if($pageActuelle == $i){ ?>
+              <li class="page-item">
+                <a class="page-link bg-pagine-active border" href="#"><?= $i; ?></a>
+              </li>
+              <?php } else {?>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="archive.php?page=<?= $i;?>&tab=faculte"><?= $i;?></a>
+              </li>
+              <?php } ?>
+              <?php }
+              if ($pageActuelle < $nombreDePages) { 
+              $x = $pageActuelle + 1;  
+              ?>
+              <li class="page-item">
+                <a class="page-link bg-pagine border" href="archive.php?page=<?= $x; ?>&tab=faculte" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+              <?php } ?>
+            </ul>
+          </nav>
+          <?php 
+          }
+          ?>
         </div>
       </div>
     </div>

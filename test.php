@@ -1,4 +1,15 @@
 <?php
+/*   $REQ_ARCHIVISTES = $connect_db->query("SELECT * FROM archiviste ORDER BY 	nomArchi");
+  $COUNT_ARCHIVISTES = $REQ_ARCHIVISTES->rowCount();
+  #----------------------------------------------------------------
+  $REQ_DEPARTEMENT = $connect_db->query("SELECT * FROM departement ORDER BY nom LIMIT 10");
+  #----------------------------------------------------------------
+  $REQ_FACULTE = $connect_db->query("SELECT * FROM faculte ORDER BY nom");
+  #----------------------------------------------------------------
+  $REQ_STUDENTS = $connect_db->query("SELECT * FROM student ORDER BY datesave DESC LIMIT 20"); */
+  #----------------------------------------------------------------
+
+
 // Connexion à la base de données (utilisez vos propres informations)
 $cnx = new PDO('mysql:host=localhost;dbname=ma_base_de_donnees;charset=utf8', 'utilisateur', 'mot_de_passe');
 

@@ -114,6 +114,34 @@ footer {
   overflow-y: scroll !important;
 }
 
+.bg-pagine {
+  background: var(--accent-200) !important;
+  outline: 0 !important;
+  font-weight: 600 !important;
+}
+
+.bg-pagine:hover {
+  background: var(--accent-100) !important;
+  outline: 0 !important;
+}
+
+.bg-pagine:focus {
+  box-shadow: none !important;
+}
+
+.bg-pagine-active {
+  background: var(--accent-100) !important;
+  outline: 0 !important;
+  font-weight: 600 !important;
+}
+.bg-pagine-active:hover {
+  background: var(--accent-100) !important;
+  outline: 0 !important;
+}
+
+.bg-pagine-active:focus {
+  box-shadow: none !important;
+}
 @media screen and (max-width: 768px) {
   .navlink {
     display: flex;
